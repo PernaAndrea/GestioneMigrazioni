@@ -1,6 +1,8 @@
 package it.polito.tdp.borders.model;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +41,19 @@ public class Model {
 			
 		}
 	}
-	
+	//mi creo una nuova classe dove ho country e il num di stati confinanti
+	public List<CountryAndNumber> getCountryAndNumbers() {
+		List<CountryAndNumber> result = new LinkedList<>();
+		
+		//riempio la lista
+		for(Country c : this.graph.vertexSet()) {
+			result.add(new CountryAndNumber(c,this.graph.degreeOf(c)));
+		}
+		
+		//ordino la lista e la ritorno
+		Collections.sort(result);
+		return result;
+	}
 	
 
 }
