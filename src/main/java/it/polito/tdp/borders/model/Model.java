@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
@@ -17,10 +18,11 @@ public class Model {
 	
 	private Graph<Country, DefaultEdge> graph ;
 	private Map<Integer,Country> countriesMap ;
+	private Simulatore sim;
 	
 	public Model() {
 		this.countriesMap = new HashMap<>() ;
-
+		this.sim = new Simulatore();
 	}
 	
 	public void creaGrafo(int anno) {
@@ -55,5 +57,34 @@ public class Model {
 		return result;
 	}
 	
+	public void simula(Country partenza) {
+		if(graph!=null) {
+		sim.init(partenza, graph);
+		sim.run();
+		}
+	}
+	//per ritornare gli output
+	public int getT() {
+		return sim.getT();
+	}
+	public List<CountryAndNumber> getStanziali() {
+		
+		Map<Country,Integer> stanziali = sim.getStanziali();
+		List<CountryAndNumber> result = new LinkedList<>();
+		
+		for(Country c : stanziali.keySet()) {
+			if(stanziali.get(c)>0) {// tolgo gli stati che non hanno nessuno (stati senza collegamenti)
+			CountryAndNumber cn = new CountryAndNumber(c,stanziali.get(c));
+			result.add(cn);
+			}
+		}
+		Collections.sort(result);
+		return result;
+	}
+
+	public Set<Country> getCountries() {
+		// TODO Auto-generated method stub
+		return this.graph.vertexSet();
+	}
 
 }
